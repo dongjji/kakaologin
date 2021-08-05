@@ -1,0 +1,38 @@
+<a id="custom-login-btn" href="javascript:loginWithKakao()">
+  <img
+    src="/images/kakao_login_large_narrow.png"
+    width="222"
+  />
+</a>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<!-- <script type="text/javascript">
+  function loginWithKakao() {
+    Kakao.Auth.login({
+      success: function(authObj) {
+        console.log(JSON.stringify(authObj))
+      },
+      fail: function(err) {
+        console.log(JSON.stringify(err))
+      },
+    })
+  }
+</script> -->
+<script>
+  window.Kakao.init('<%=process.env.KAKAO_LOGIN_KEY_JS%>');
+
+  function loginWithKakao() {
+    window.Kakao.Auth.login({
+      scope: 'profile_nickname, account_email, gender',
+      success: function(authObj) {
+        console.log(authObj);
+        window.Kakao.API.request({
+          url: '/v2/user/me',
+          success: res => {
+            const kakao_account = res.kakao_account;
+            console.log(kakao_account);
+          }
+        });
+      }
+    })
+  }
+</script>
